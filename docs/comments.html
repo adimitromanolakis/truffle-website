@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Test Page B2</title>
+    <title>Test Page A1</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -29,11 +29,18 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+
+
 </head>
 
 <body>
 
-
+    <style>
+    @media only screen and (min-width: 768px) {
+.intro-header .page-heading, .intro-header .post-heading, .intro-header .site-heading {
+    padding: 50px 0 !important;
+}
+    </style>
 
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
@@ -44,7 +51,7 @@
                     <span class="sr-only">Toggle navigation</span>
                     Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="index.html">Start Bootstrap</a>
+                <a class="navbar-brand" href="index.html"></a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -62,14 +69,14 @@
 
     <!-- Page Header -->
     <!-- Set your background image for this header on the line below. -->
-    <header class="intro-header" style="background-image: url('img/about-bg.jpg')">
+  <header class="intro-header" style="background-image: url(img/forest1.jpg);">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="page-heading">
                         <h1 style="font-size:30px;">Comments Section</h1>
                         <hr class="small">
-                        <span class="subheading">Ask your questions below.</span>
+                        <span class="subheading">Leave or comments or ask your questions below.</span>
                     </div>
                 </div>
             </div>
@@ -80,11 +87,11 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-               
-            </div>
-            
 
-            
+            </div>
+
+
+
         </div>
     </div>
 
@@ -96,13 +103,13 @@
 
                 <div id="disqus_thread"></div>
 </div></div></div>
-    
+
     <!-- Footer -->
     <footer>
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                   
+
                 </div>
             </div>
         </div>
@@ -120,9 +127,7 @@
 
     <!-- Theme JavaScript -->
     <script src="js/clean-blog.min.js"></script>
-    
-    
-    
+
 
 
 
@@ -133,20 +138,19 @@
 *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
 
 var disqus_config = function () {
-this.page.url = "http://www.tr2.com/P2";  // Replace PAGE_URL with your page's canonical URL variable
-this.page.identifier = "P2"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+this.page.url = "http://www.tr2.com";  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = "P1"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
 };
+
 
 (function() { // DON'T EDIT BELOW THIS LINE
 var d = document, s = d.createElement('script');
-s.src = 'https://tq12x.disqus.com/embed.js';
+s.src = 'https://truffle-1.disqus.com/embed.js';
 s.setAttribute('data-timestamp', +new Date());
 (d.head || d.body).appendChild(s);
 })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-
 
 </body>
 
