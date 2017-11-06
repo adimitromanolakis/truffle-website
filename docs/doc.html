@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Clean Blog</title>
+  
+  <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+
+  
+  
+  <!-- Bootstrap Core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Theme CSS -->
+  <link href="css/clean-blog.css" rel="stylesheet">
+  <!-- Custom Fonts -->
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header page-scroll">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i> </button>
+        <!-- <a class="navbar-brand" href="index.html">TRUFFLE</a> -->
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="index.html">Home</a>
+          </li>
+          <li>
+            <a href="#documentation">Documentation</a>
+          </li>
+          <li>
+            <a href="#download">Download</a>
+          </li>
+          
+          <li>
+            <a href="#forum">Forum</a>
+          </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+  </nav>
+  <!-- Page Header -->
+  <!-- Set your background image for this header on the line below. -->
+  <header class="intro-header" style="background-image: url(&quot;../forest1.jpg&quot;);">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          <div class="site-heading">
+            <h1>TRUFFLE</h1>
+            <hr class="small"> <span class="subheading">Relationship and shared segment estimation from genetic variant data</span> </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- Main Content -->
+  <div class="container" id="main">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+         
+           
+           
+        <div class="post-preview" id="overview">
+          <div href="post.html">
+        
+        
+        <h1 id="trufflefastsharedsegmentandancestryestimation">TRUFFLE - Fast shared segment and ancestry estimation.</h1>
+
+<h1 id="quickstart">Quickstart</h1>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Estimating relatedness and co-ancestry among pairs of individuals is a commonly encountered task in most association or 
+population genetics studies. TRUFFLE enables the simple and accurate identification of IBD1 and 2 segments, 
+calculation of total IBD1/2 probabilities and provide graphical reporting of distribution of shared segments 
+across pairs of individuals. </p>
+
+<h2 id="importantnotesforthisrelease">Important Notes for this release</h2>
+
+<p>Truffle is currently under development. There might be serious bugs and issues that we are currently working on. 
+If you use this version of truffle, we ask you to notify us of any problems or errors encountered. If truffle works perfectly, we
+would also like your feedback.</p>
+
+<h2 id="quickstart-1">Quickstart</h2>
+
+<pre><code class="sh language-sh">./truffle --vcf input.vcf.gz --cpu 4
+</code></pre>
+
+<p>Truffle can read most common vcf files as input to the segment detection algorithm. The file should, generally, contain
+all chromosomes from all individuals. Currently, there is no support for joining vcf files from different chromosomes.</p>
+
+<p>For most common use cases, the vcf file should contain autosomal chromosomes only.</p>
+
+<h2 id="outputalistofsegments">Output a list of segments</h2>
+
+<p>To generate a list of segments in the file truffle.segments use the option <code>--segments</code>:</p>
+
+<pre><code class="sh language-sh">./truffle --vcf input.vcf.gz --cpu 4 ---segments
+</code></pre>
+
+<h2 id="segmentdetectionsensitivity">Segment detection sensitivity</h2>
+
+<p>Truffle has some build-in measures to adjust the sensitivity of the segments detection.</p>
+
+<p>The default sensitivity threshold should produce reasonable but maybe not optimal, results for whole-genome autosomal marker panels. In many cases you might need to adjust it, for example when:</p>
+
+<ul>
+<li>running exome sequencing data</li>
+
+<li>analyzing data from mixed ethnicities</li>
+
+<li>analyzing single chromosomes</li>
+</ul>
+
+<p>In most cases, you get more than expected relatedness and you might want to consider adjusting the parameter L to 1.5-3. For example:</p>
+
+<pre><code class="sh language-sh">./truffle --vcf input.vcf.gz --L 2
+</code></pre>
+
+<h3 id="optionalldpruningandfilteringstepsforgenotypingarraydata">OPTIONAL: LD-pruning and filtering steps for genotyping array data</h3>
+
+<p>The following commands show a suggested pipeline for performing LD-pruning of variants and minor allele frequency pruning before analysis:</p>
+
+<pre><code>plink --bfile input --maf 0.05 --mind 0.2 --make-bed --out /tmp/t
+plink --bfile /tmp/t --maf 0.05 --geno 0.05 --make-bed --out /tmp/t
+
+plink --bfile /tmp/t --indep-pairwise 2000 100 0.5 --out /tmp/t
+cat /tmp/t.bim|awk '$1&lt;=22' &gt;/tmp/autosom.txt
+plink --bfile /tmp/t --extract /tmp/t.prune.in --make-bed --out /tmp/t2
+
+plink --bfile /tmp/t2 --extract /tmp/autosom.txt --recode-vcf --out /tmp/filtered
+</code></pre>
+
+<h2 id="commonlyusedcommandlineoptions">Commonly used command line options</h2>
+
+<h3 id="inputoutputcontrol">Input/Output control</h3>
+
+<pre><code>--vcf `vcffile
+</code></pre>
+
+<p>Reads the input <code>vcffile</code> for processing.</p>
+
+<pre><code>--segments
+</code></pre>
+
+<p>Output a list of identified segments in the file truffle.segments</p>
+
+<pre><code>--out X
+</code></pre>
+
+<p>Change the name of the output files. The results will be stored in the files X.ibd and X.segments</p>
+
+<h3 id="cpuusagecontrol">CPU usage control</h3>
+
+<ul>
+<li><code>--cpu N</code></li>
+</ul>
+
+<p>Use N cpus when running truffle.</p>
+
+<h3 id="segmentlengththreshold">Segment length threshold</h3>
+
+<ul>
+<li><code>--L X</code></li>
+</ul>
+
+<p>Adjust the sensitivity threshold for detecting segments to X. </p>
+
+<h3 id="variantfiltering">Variant filtering</h3>
+
+<ul>
+<li><code>--maf *X*</code></li>
+</ul>
+
+<p>Remove variants that have a minor allele frequency less than X. For example:
+<code>--maf 0.05</code></p>
+
+<ul>
+<li><code>--missing X</code></li>
+</ul>
+
+<p>Excludes variants with missing rate more than X. For example <code>--missing 0.02</code></p>
+
+<ul>
+<li><code>--mindist X</code></li>
+</ul>
+
+<p>Removes variants that are less than X base-pairs apart.For example <code>--mindist 2000</code></p>
+
+<h3 id="otheroptions">Other options</h3>
+
+<ul>
+<li><code>--pair ID1 ID2</code></li>
+
+<li><code>--ibs1 x</code></li>
+
+<li><code>--ibs2 x</code></li>
+* 
+</ul>
+        
+        
+          </div>
+          <p>
+        
+          As studies generate variant data on large (>0.5 million) numbers of subjects, estimating relatedness and co-ancestry among pairs of individuals in a study is an important step in both family and unrelated designs.
+          
+                                 <p>TRUFFLE is a new software package for IBD segment detection and relationship estimation. 
+              <ul class="" style="amax-width:290px">
+                <li>Runs on linux and can read any VCF variant format file.</li>
+                <li>Is very efficient and easy to use compared to most other segment estimation methods.</li>
+              </ul>
+              </p>
+          
+              <div class="row">
+
+          <div class="col-sm-4">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">Input file</h3>
+            </div>
+            <div class="panel-body">
+              multi-sample autosomal VCF file with >30k variants.
+          
+            </div>
+          </div>
+          </div>
+          
+          
+          
+          <div class="col-sm-8">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">Output</h3>
+            </div>
+            <div class="panel-body">
+  
+           
+                    <b>truffle.ibd:</b> p.IBD1 and p.IBD2 estimation of relatedness across every pair of a study<br> <br> 
+               
+                    <b>truffle.segments:</b> Shared IBD segment locations and lengths.
+            </div>
+          </div>
+          </div>
+                   
+          </div>
+          
+          
+          
+          
+          
+ 
+        </div>
+        
+        
+        
+        
+        <hr>
+        
+        
+        
+                
+        <div class="post-preview" id="documentation">
+          <div href="post.html">
+            <h3 class="post-title">Documentation</h3>
+          </div>
+          <p>
+   
+          fdlsjfd l;skj ;klj sfdlkjdfs lfsdkjkflj 
+          </p>
+        </div>
+        
+        
+        
+        
+        <hr>
+        
+        <div class="post-preview" id="download">
+          <div href="post.html">
+            <h3 class="post-title">Download</h3>
+          </div>
+          <p>
+            <div class="alert alert-warning" role="alert"> <strong>Warning!</strong> Better check yourself, you're not looking too good. </div>
+            
+            
+            <a class="btn btn-info" href="sdf">Download link</a>
+          fdlsjfd l;skj ;klj sfdlkjdfs lfsdkjkflj 
+          </p>
+          <p class="post-meta"></p>
+        </div>
+                
+        
+         <hr> 
+        
+
+
+        
+        <div class="post-preview"  id="forum">
+          <div>
+            <h2 class="post-title">Forum</h2>
+            
+          <p>
+            <a href="http://truffle.freeforums.net/">Click below to go to our support and documentation forums.</a>
+            <br><br>
+    
+            <a class="btn btn-default" href="http://truffle.freeforums.net/">Go to the support Forums</a>
+          
+          </p>
+          </div>
+
+        </div>
+        
+        
+        <hr>
+
+        
+        
+        
+        
+        
+        <div class="post-preview"  id="contact">
+          <a href="post.html">
+            <h2 class="post-title"> Failure is not an option </h2>
+            <h3 class="post-subtitle"> Many say exploration is part of our destiny, but it’s actually our duty to future generations. </h3>
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#">Start Bootstrap</a> on July 8, 2014</p>
+        </div>
+        
+        
+        
+
+        
+        <!-- Pager
+        <ul class="pager">
+          <li class="next">
+            <a href="#">Older Posts →</a>
+          </li>
+        </ul>
+         -->
+        
+        
+        
+        
+        
+        
+        
+      </div>
+    </div>
+  </div>
+  <hr>
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+          <ul class="list-inline text-center">
+            <li>
+              <a href="#"> <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span> </a>
+            </li>
+            <li>
+              <a href="#"> <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                </span> </a>
+            </li>
+            <li>
+              <a href="#"> <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span> </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright © Apostolos Dimitromanolakis 2017</p>
+        </div>
+      </div>
+    </div>
+    
+    <div style="margin-top:500px;"></div>
+  </footer>
+  
+  
+  
+  <!-- jQuery -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <!-- Bootstrap Core JavaScript -->
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+  <!-- Contact Form JavaScript -->
+  <script src="js/jqBootstrapValidation.js"></script>
+  <script src="js/contact_me.js"></script>
+  <!-- Theme JavaScript -->
+  <script src="js/clean-blog.min.js"></script>
+  
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="aahttps://www.googletagmanager.com/gtag/js?id=UA-7003063-8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-7003063-8');
+</script>
+
+  
+  
+</body>
+
+</html>
