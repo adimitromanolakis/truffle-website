@@ -1,1 +1,3 @@
-git add . ; git commit -m `date '+%Y-%m-%d_%H:%M'`; git push
+A=`date '+%Y-%m-%d %H:%M'`
+
+git add . ; git commit -m "$A"; git push
