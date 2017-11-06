@@ -15,11 +15,11 @@
   
   
   <!-- Bootstrap Core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Theme CSS -->
-  <link href="css/clean-blog.css" rel="stylesheet">
+  <link href="../css/clean-blog.css" rel="stylesheet">
   <!-- Custom Fonts -->
-  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -28,53 +28,34 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+    <style>
+    
+    h1 { margin-bottom:30px; }
+    
+    h2,h3 { margin-bottom:30px; }
+    
+    @media print { 
+ 
+    body { font-size:25px; }
+    code,pre { font-size:100%; }
+    
+    
+    h1 { font-size:150%; } 
+    h2 { font-size:110%; } 
+    h3 { font-size:90%; font-weightx:300 !important;} 
+    
+    
+    }
+    
+    
+    </style>
 </head>
 
 <body>
   <!-- Navigation -->
-  <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header page-scroll">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i> </button>
-        <!-- <a class="navbar-brand" href="index.html">TRUFFLE</a> -->
-      </div>
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-            <a href="index.html">Home</a>
-          </li>
-          <li>
-            <a href="#documentation">Documentation</a>
-          </li>
-          <li>
-            <a href="#download">Download</a>
-          </li>
-          
-          <li>
-            <a href="#forum">Forum</a>
-          </li>
-          
-        </ul>
-      </div>
-      <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-  </nav>
-  <!-- Page Header -->
-  <!-- Set your background image for this header on the line below. -->
-  <header class="intro-header" style="background-image: url(&quot;../forest1.jpg&quot;);">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-          <div class="site-heading">
-            <h1>TRUFFLE</h1>
-            <hr class="small"> <span class="subheading">Relationship and shared segment estimation from genetic variant data</span> </div>
-        </div>
-      </div>
-    </div>
-  </header>
+
+
   <!-- Main Content -->
   <div class="container" id="main">
     <div class="row">
@@ -82,11 +63,14 @@
          
            
            
-        <div class="post-preview" id="overview">
+        <div class="poxst-preview" id="overview">
           <div href="post.html">
         
         
+        <center>
         <h1 id="trufflefastsharedsegmentandancestryestimation">TRUFFLE - Fast shared segment and ancestry estimation.</h1>
+</center>
+<hr>
 
 <h1 id="quickstart">Quickstart</h1>
 
@@ -209,156 +193,16 @@ plink --bfile /tmp/t2 --extract /tmp/autosom.txt --recode-vcf --out /tmp/filtere
 
 <p>Removes variants that are less than X base-pairs apart.For example <code>--mindist 2000</code></p>
 
-<h3 id="otheroptions">Other options</h3>
 
-<ul>
-<li><code>--pair ID1 ID2</code></li>
 
-<li><code>--ibs1 x</code></li>
-
-<li><code>--ibs2 x</code></li>
-* 
-</ul>
         
         
           </div>
           <p>
-        
-          As studies generate variant data on large (>0.5 million) numbers of subjects, estimating relatedness and co-ancestry among pairs of individuals in a study is an important step in both family and unrelated designs.
-          
-                                 <p>TRUFFLE is a new software package for IBD segment detection and relationship estimation. 
-              <ul class="" style="amax-width:290px">
-                <li>Runs on linux and can read any VCF variant format file.</li>
-                <li>Is very efficient and easy to use compared to most other segment estimation methods.</li>
-              </ul>
-              </p>
-          
-              <div class="row">
-
-          <div class="col-sm-4">
-          <div class="panel panel-info">
-            <div class="panel-heading">
-              <h3 class="panel-title">Input file</h3>
-            </div>
-            <div class="panel-body">
-              multi-sample autosomal VCF file with >30k variants.
-          
-            </div>
-          </div>
-          </div>
-          
-          
-          
-          <div class="col-sm-8">
-          <div class="panel panel-info">
-            <div class="panel-heading">
-              <h3 class="panel-title">Output</h3>
-            </div>
-            <div class="panel-body">
-  
-           
-                    <b>truffle.ibd:</b> p.IBD1 and p.IBD2 estimation of relatedness across every pair of a study<br> <br> 
-               
-                    <b>truffle.segments:</b> Shared IBD segment locations and lengths.
-            </div>
-          </div>
-          </div>
-                   
-          </div>
-          
-          
-          
-          
-          
- 
-        </div>
-        
-        
+        </p>
         
         
         <hr>
-        
-        
-        
-                
-        <div class="post-preview" id="documentation">
-          <div href="post.html">
-            <h3 class="post-title">Documentation</h3>
-          </div>
-          <p>
-   
-          fdlsjfd l;skj ;klj sfdlkjdfs lfsdkjkflj 
-          </p>
-        </div>
-        
-        
-        
-        
-        <hr>
-        
-        <div class="post-preview" id="download">
-          <div href="post.html">
-            <h3 class="post-title">Download</h3>
-          </div>
-          <p>
-            <div class="alert alert-warning" role="alert"> <strong>Warning!</strong> Better check yourself, you're not looking too good. </div>
-            
-            
-            <a class="btn btn-info" href="sdf">Download link</a>
-          fdlsjfd l;skj ;klj sfdlkjdfs lfsdkjkflj 
-          </p>
-          <p class="post-meta"></p>
-        </div>
-                
-        
-         <hr> 
-        
-
-
-        
-        <div class="post-preview"  id="forum">
-          <div>
-            <h2 class="post-title">Forum</h2>
-            
-          <p>
-            <a href="http://truffle.freeforums.net/">Click below to go to our support and documentation forums.</a>
-            <br><br>
-    
-            <a class="btn btn-default" href="http://truffle.freeforums.net/">Go to the support Forums</a>
-          
-          </p>
-          </div>
-
-        </div>
-        
-        
-        <hr>
-
-        
-        
-        
-        
-        
-        <div class="post-preview"  id="contact">
-          <a href="post.html">
-            <h2 class="post-title"> Failure is not an option </h2>
-            <h3 class="post-subtitle"> Many say exploration is part of our destiny, but it’s actually our duty to future generations. </h3>
-          </a>
-          <p class="post-meta">Posted by
-            <a href="#">Start Bootstrap</a> on July 8, 2014</p>
-        </div>
-        
-        
-        
-
-        
-        <!-- Pager
-        <ul class="pager">
-          <li class="next">
-            <a href="#">Older Posts →</a>
-          </li>
-        </ul>
-         -->
         
         
         
@@ -375,27 +219,8 @@ plink --bfile /tmp/t2 --extract /tmp/autosom.txt --recode-vcf --out /tmp/filtere
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-          <ul class="list-inline text-center">
-            <li>
-              <a href="#"> <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                                </span> </a>
-            </li>
-            <li>
-              <a href="#"> <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                                </span> </a>
-            </li>
-            <li>
-              <a href="#"> <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span> </a>
-            </li>
-          </ul>
-          <p class="copyright text-muted">Copyright © Apostolos Dimitromanolakis 2017</p>
+         
+         
         </div>
       </div>
     </div>

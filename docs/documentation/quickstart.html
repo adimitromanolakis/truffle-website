@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Apostolos Dimitromanolakis" />
+
+<meta name="date" content="2017-09-14" />
+
+<title>TRUFFLE – v1.2</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">TRUFFLE – v1.2</h1>
+<h4 class="author"><em>Apostolos Dimitromanolakis</em></h4>
+<h4 class="date"><em>2017-09-14</em></h4>
+
+
+
+<link href="data:text/css; charset=utf-8,%40font%2Dface%20%7B%0A%20%20font%2Dfamily%3A%20%27Nunito%27%3B%0A%20%20font%2Dstyle%3A%20normal%3B%0A%20%20font%2Dweight%3A%20400%3B%0A%20%20src%3A%20local%28%27Nunito%20Regular%27%29%2C%20local%28%27Nunito%2DRegular%27%29%2C%20url%28https%3A%2F%2Ffonts%2Egstatic%2Ecom%2Fs%2Fnunito%2Fv8%2FkpI87QY2ce%2Dmk2ZnKb%2Dr0g%2Ettf%29%20format%28%27truetype%27%29%3B%0A%7D%0A" rel="stylesheet">
+<style>body { zoom: 1.4; }  
+h2,h3,h4,h5 { font-family: Lato; } 
+
+h1 { font-family: Oswald; font-weight:400; margin-top:50px; } 
+h2 { font-size: 130%; }
+h3 { font-size: 110%; }
+h4 { font-size: 105%; font-family:Courier; white-space:pre; }
+h5 { font-size: 100%; }
+
+
+p,li { font-family: Nunito; }
+
+.main-content pre> code {  awhite-space: pre-wr
+ap; } 
+
+pre,code { white-space: pre;  }
+
+x#truffle\.ibd { background:red; }
+#truffle\.segments > .sourceCode { font-size:90%;     background-color: #f7f7f7; }
+
+#truffle\.ibd > .sourceCode { font-size:90%;     background-color: #f7f7f7; }
+#truffle\.segments > code { background:blue; overflow:scroll; }
+</style>
+<p>Fast shared segment and ancestry estimation.</p>
+<div id="quickstart" class="section level1">
+<h1>Quickstart</h1>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Estimating relatedness and co-ancestry among pairs of individuals is a commonly encountered task in most association or population genetics studies. TRUFFLE enables the simple and accurate identification of IBD1 and 2 segments, calculation of total IBD1/2 probabilities and provide graphical reporting of distribution of shared segments across pairs of individuals.</p>
+</div>
+<div id="important-notes-for-this-release" class="section level2">
+<h2>Important Notes for this release</h2>
+<p>Truffle is currently under development. There might be serious bugs and issues that we are currently working on. If you use this version of truffle, we ask you to notify us of any problems or errors encountered. If truffle works perfectly, we would also like your feedback.</p>
+</div>
+<div id="input-file-requirements" class="section level2">
+<h2>Input file requirements</h2>
+<p>Truffle requires a single <em>whole-genome</em> vcf input file with genotypes for all samples.</p>
+<p>In general any vcf file will work as long as it contains information from all the autosomal chromosomes. If you have a plink bed/bim file that you previously ld-pruned and filtered, truffle can use it as long as you convert it back to vcf using the plink command <code>--recode-vcf</code>.</p>
+</div>
+<div id="number-of-marker-requirements" class="section level2">
+<h2>Number of marker requirements</h2>
+<p>For this pre-release version we recommend filtering down the markers of the vcf file to 60-200k.</p>
+<p>If you have an unfiltered vcf file with &lt; 10 million markers, truffle has embedded functionality for filtering the vcf file before analysis.</p>
+</div>
+<div id="quickstart-1" class="section level2">
+<h2>Quickstart</h2>
+<p>VCF file with 60-200k markers:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">./truffle</span> --vcf input.vcf.gz --cpu 4</code></pre></div>
+<p>Unfiltered VCF file, with millions of markers:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">./truffle</span> --vcf input.vcf.gz --cpu 4 --mindist 2000 --maf 0.1</code></pre></div>
+<p>Also generate a list of segments identified:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">./truffle</span> --vcf input.vcf.gz --cpu 4 --segments</code></pre></div>
+</div>
+<div id="example-data" class="section level2">
+<h2>Example data</h2>
+<p>You can download a VCF file used for the examples below from:</p>
+<p><a href="https://adimitromanolakis.github.io/truffle/fs-and-po-pairs-from-1000genomes.vcf.gz">fs-and-po-pairs-from-1000genomes.vcf.gz 4.5MB</a></p>
+<p>This dataset includes 47 selected CEU samples from 1000 genomes sequencing data, including some parent-offpring and full-sibling pairs.</p>
+</div>
+<div id="other-types-of-analysis" class="section level2">
+<h2>Other types of analysis</h2>
+<p>Truffle can read most common vcf files as input to the segment detection algorithm. The file should, generally, contain all chromosomes from all individuals. Currently, there is no support for joining vcf files from different chromosomes.</p>
+<p>For most common use cases, the vcf file should contain autosomal chromosomes only.</p>
+</div>
+<div id="running-a-single-chromosome" class="section level2">
+<h2>Running a single chromosome</h2>
+<p>If you would like to perform segment identification on a single chromosome, the sensitivity must bu adjusted by the corresponding length of the chromosome divided by the total genome length. As a starting point we recommend a setting of <code>--L 10</code>.</p>
+</div>
+<div id="output-a-list-of-segments" class="section level2">
+<h2>Output a list of segments</h2>
+<p>To generate a list of segments in the file truffle.segments use the option <code>--segments</code>:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">./truffle</span> --vcf input.vcf.gz --cpu 4 ---segments</code></pre></div>
+</div>
+</div>
+<div id="output-files-description" class="section level1">
+<h1>Output files description</h1>
+<div id="truffle.ibd" class="section level2">
+<h2>truffle.ibd</h2>
+<p>An example output file is as follows:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash">           <span class="ex">ID1</span>                ID2    NMARK  NCOMMON         IBD0        IBD1_MAX IBD1_NSEGS      IBD1        IBD2_MAX IBD2_NSEGS      IBD2    
+    <span class="ex">P7_HG02657</span>         P5_HG02085   169413        0     1.000000             430          0  0.000000              38          0  0.000000    
+    <span class="ex">P7_HG02658</span>         P1_HG00269   169413        0     1.000000             456          0  0.000000              40          0  0.000000    
+    <span class="ex">P7_HG02658</span>         P6_HG02429   169413        0     1.000000             225          0  0.000000              29          0  0.000000    
+    <span class="ex">P8_HG03343</span>         P1_HG00269   169413        0     1.000000             233          0  0.000000              28          0  0.000000    
+    <span class="ex">P8_HG03343</span>         P6_HG02429   169413        0     1.000000             464          0  0.000000              39          0  0.000000    
+   <span class="ex">P10_HG03754</span>        P10_HG03750   169413        0     0.001765           13475         23  0.987498             270         18  0.010737    
+   <span class="ex">P14_NA19334</span>        P14_NA19331   169413        0     0.263604            9753         47  0.498734            1102        115  0.237662    </code></pre></div>
+<p>The output file columns are:</p>
+<ul>
+<li><p>ID1,ID2 : ID’s of pair.</p></li>
+<li><p>NMARK : number of markers that were used.</p></li>
+<li><p>NCOMMON : not used.</p></li>
+<li><p>IBD0,IBD1,IBD2 : The computed proportion of genome that is IBD0,1 or 2.</p></li>
+<li>IBD1_MAX : The maximum length of segment found to be IBD1 or 2.</li>
+<li><p>IBD2_MAX : The maximum length of segment found to be IBD2.</p></li>
+<li><p>IBD1_NSEGS : Number of segments that are identified as IBD1 or 2.</p></li>
+<li><p>IBD2_NSEGS : Number of segments that are identified as 2.</p></li>
+</ul>
+<p>In the above output file we find that the 5 first pairs are unrelated (IBD1,2 &lt; 0.001).</p>
+<p>The pair P10_HG03754 P10_HG03750 is identified as a parent offspring pair (IBD1 &gt; 0.95).</p>
+<p>The last pair is definetely a full-sibling, having IBD1 &gt; 0.4, IBD2 &gt; 0.15.</p>
+</div>
+<div id="truffle.segments" class="section level2">
+<h2>truffle.segments</h2>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">TYPE</span>              ID1             ID2  CHROM  VARSTART   VAREND              POS Mbp      LENGTH Mbp    NMARKERS     
+<span class="ex">IBD1</span>       P0_HG00120      P0_HG00116      6     59059    59814           0.2765 Mbp      7.4560 Mbp         756
+<span class="ex">IBD2</span>       P0_HG00120      P0_HG00116      6     64814    64872         104.6593 Mbp      1.3802 Mbp          59
+<span class="ex">IBD2</span>       P0_HG00120      P0_HG00116      6     65197    65264         110.7780 Mbp      1.7072 Mbp          68
+<span class="ex">IBD1</span>       P0_HG00120      P0_HG00116      6     62715    65328          52.5659 Mbp     61.1437 Mbp        2614
+<span class="ex">IBD2</span>       P0_HG00120      P0_HG00116      6     66651    66706         139.8456 Mbp      1.8712 Mbp          56
+<span class="ex">IBD1</span>       P0_HG00120      P0_HG00116      6     66064    66818         130.3246 Mbp     13.5776 Mbp         755
+
+</code></pre></div>
+<p>The output file columns are:</p>
+<ul>
+<li><p>ID1,ID2 : ID’s of pair.</p></li>
+<li><p>TYPE : whether the segment was IBD1 or 2.</p></li>
+<li><p>CHROM : chromosome name.</p></li>
+<li><p>VARSTART : the number of marker that started the segment.</p></li>
+<li><p>VAREND : the number of marker that ended the segment.</p></li>
+<li><p>POS : Position of the start of the segment in MBpairs.</p></li>
+<li><p>LENGTH : Length of the segment in MBp.</p></li>
+<li><p>NMARKERS : The length of the segment in number of markers.</p></li>
+</ul>
+</div>
+</div>
+<div id="notes-for-using-truffle" class="section level1">
+<h1>Notes for using truffle</h1>
+<div id="segment-detection-sensitivity" class="section level2">
+<h2>Segment detection sensitivity</h2>
+<p>Truffle has some build-in measures to adjust the sensitivity of the segments detection.</p>
+<p>The default sensitivity threshold should produce reasonable but maybe not optimal, results for whole-genome autosomal marker panels. In many cases you might need to adjust it, for example when:</p>
+<ul>
+<li>running exome sequencing data,</li>
+<li>analyzing studies with mixed ethnicity individuals,</li>
+<li>analyzing single chromosomes.</li>
+</ul>
+<p>In most cases, you get more than expected relatedness and you might want to consider adjusting the parameter L to 1.5-3. For example:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">./truffle</span> --vcf input.vcf.gz --L 2</code></pre></div>
+<div id="optional-ld-pruning-and-filtering-steps-for-genotyping-array-data" class="section level3">
+<h3>OPTIONAL: LD-pruning and filtering steps for genotyping array data</h3>
+<p>The following commands show a suggested pipeline for performing LD-pruning of variants and minor allele frequency pruning before running truffle:</p>
+<pre><code>plink --bfile input --maf 0.05 --mind 0.2 --make-bed --out /tmp/t
+plink --bfile /tmp/t --maf 0.05 --geno 0.05 --make-bed --out /tmp/t
+
+plink --bfile /tmp/t --indep-pairwise 2000 100 0.5 --out /tmp/t
+cat /tmp/t.bim|awk '$1&lt;=22' &gt;/tmp/autosom.txt
+plink --bfile /tmp/t --extract /tmp/t.prune.in --make-bed --out /tmp/t2
+
+plink --bfile /tmp/t2 --extract /tmp/autosom.txt --recode-vcf --out /tmp/filtered</code></pre>
+</div>
+</div>
+</div>
+<div id="commonly-used-command-line-options" class="section level1">
+<h1>Commonly used command line options</h1>
+<div id="inputoutput-control" class="section level3">
+<h3>Input/Output control</h3>
+<pre><code>--vcf `vcffile</code></pre>
+<p>Reads the input <code>vcffile</code> for processing.</p>
+<pre><code>--segments</code></pre>
+<p>Output a list of identified segments in the file truffle.segments</p>
+<pre><code>--out X</code></pre>
+<p>Change the name of the output files. The results will be stored in the files X.ibd and X.segments</p>
+</div>
+<div id="cpu-usage-control" class="section level3">
+<h3>CPU usage control</h3>
+<ul>
+<li><code>--cpu N</code></li>
+</ul>
+<p>Use N cpus when running truffle.</p>
+</div>
+<div id="segment-length-threshold" class="section level3">
+<h3>Segment length threshold</h3>
+<ul>
+<li><code>--L X</code></li>
+</ul>
+<p>Adjust the sensitivity threshold for detecting segments to X. Default: 1. Recommended : 0.5-2 for whole genome scans. 5-22 for single chromosome scans.</p>
+</div>
+<div id="variant-filtering" class="section level3">
+<h3>Variant filtering</h3>
+<ul>
+<li><code>--maf *X*</code></li>
+</ul>
+<p>Remove variants that have a minor allele frequency less than X. For example: <code>--maf 0.05</code></p>
+<ul>
+<li><code>--missing X</code></li>
+</ul>
+<p>Excludes variants with missing rate more than X. For example <code>--missing 0.02</code></p>
+<ul>
+<li><code>--mindist X</code></li>
+</ul>
+<p>Removes variants that are less than X base-pairs apart.For example <code>--mindist 2000</code></p>
+</div>
+<div id="other-options" class="section level3">
+<h3>Other options</h3>
+<ul>
+<li><code>--pair ID1 ID2</code></li>
+<li><code>--ibs1 x</code></li>
+<li><code>--ibs2 x</code></li>
+<li><code>--thin x</code></li>
+</ul>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
