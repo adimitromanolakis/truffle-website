@@ -33,20 +33,27 @@
     
     h1 { margin-bottom:30px; }
     
-    h2,h3 { margin-bottom:30px; }
+    h2,h3 { margin-bottom:10px; }
+    
+    h1 { font-size: 27px; }
+    h2 { font-size: 19px; font-weight:800; }
+    h3 { font-size: 16px; }
+    
     
     @media print { 
- 
+    body { zoom: 0.7; }
     body { font-size:25px; }
     code,pre { font-size:100%; }
     
-    
-    h1 { font-size:150%; } 
-    h2 { font-size:110%; } 
-    h3 { font-size:90%; font-weightx:300 !important;} 
-    
+    h1 { font-size:120%; } 
+    h2 { font-size:100%; } 
+    h3 { font-size:90%; } 
     
     }
+    
+    
+    p { font-family: Open Sans; }
+
     
     
     </style>
@@ -66,67 +73,138 @@
         <div class="poxst-preview" id="overview">
           <div href="post.html">
         
-        
-        <center>
-        <h1 id="trufflefastsharedsegmentandancestryestimation">TRUFFLE - Fast shared segment and ancestry estimation.</h1>
+        <br><br><center>
+        <h1 style='font-size:30px' id="trufflefastsharedsegmentandancestryestimation">TRUFFLE - Fast shared segment and ancestry estimation.</h1>
 </center>
-<hr>
+<br>
 
-<h1 id="quickstart">Quickstart</h1>
 
-<h2 id="introduction">Introduction</h2>
-
-<p>Estimating relatedness and co-ancestry among pairs of individuals is a commonly encountered task in most association or 
-population genetics studies. TRUFFLE enables the simple and accurate identification of IBD1 and 2 segments, 
-calculation of total IBD1/2 probabilities and provide graphical reporting of distribution of shared segments 
-across pairs of individuals. </p>
-
-<h2 id="importantnotesforthisrelease">Important Notes for this release</h2>
-
-<p>Truffle is currently under development. There might be serious bugs and issues that we are currently working on. 
-If you use this version of truffle, we ask you to notify us of any problems or errors encountered. If truffle works perfectly, we
-would also like your feedback.</p>
-
-<h2 id="quickstart-1">Quickstart</h2>
-
-<pre><code class="sh language-sh">./truffle --vcf input.vcf.gz --cpu 4
-</code></pre>
-
-<p>Truffle can read most common vcf files as input to the segment detection algorithm. The file should, generally, contain
-all chromosomes from all individuals. Currently, there is no support for joining vcf files from different chromosomes.</p>
-
+<div id="quickstart" class="section level1">
+<h1>Quickstart</h1>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Estimating relatedness and co-ancestry among pairs of individuals is a commonly encountered task in most association or population genetics studies. TRUFFLE enables the simple and accurate identification of IBD1 and 2 segments, calculation of total IBD1/2 probabilities and provide graphical reporting of distribution of shared segments across pairs of individuals.</p>
+</div>
+<div id="important-notes-for-this-release" class="section level2">
+<h2>Important Notes for this release</h2>
+<p>Truffle is currently under development and a beta version has been released. This means that while the main algorithm has been validated in numerous datasets, there might still be some loose ends.</p>
+<p>We ask you to notify us of any problems or errors encountered. If truffle works perfectly you can also send us an email with your experience.</p>
+</div>
+<div id="input-file-requirements" class="section level2">
+<h2>Input file requirements</h2>
+<p>For the most common use case, truffle requires a single <em>whole-genome</em> vcf input file with genotypes for every individuals.</p>
+<p>Most vcf files should be readable as input. If you have a plink bed/bim file that you previously ld-pruned and filtered, truffle can use it as long as you convert it back to vcf using the plink command <code>--recode-vcf</code>.</p>
+<p>It is also possible to run single-chromosome or single region analysis, for identifying segment locations and sizes. In such cases it might be necessary to adjust the thresholds for detecting segments.</p>
+</div>
+<div id="number-of-marker-requirements" class="section level2">
+<h2>Number of marker requirements</h2>
+<p>For this pre-release version we recommend filtering down the markers of the vcf file to 100-500k.</p>
+<p>If you have an unfiltered vcf file with &lt; 10 million markers, truffle has embedded functionality for filtering the vcf file before analysis.</p>
+</div>
+<div id="default-filtering-criteria" class="section level2">
+<h2>Default filtering criteria</h2>
+<p>By default truffle filters out markers with minor allele frequency &lt; 5% or missing data &gt; 5%. If you would like to include all markers in analysis you can use the option <code>--nofiltering</code>.</p>
+</div>
+<div id="quickstart-1" class="section level2">
+<h2>Quickstart</h2>
+<p>VCF file with 60-200k markers:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">./truffle</span> --vcf input.vcf.gz --cpu 4</code></pre></div>
+<p>Unfiltered VCF file, with millions of markers:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">./truffle</span> --vcf input.vcf.gz --cpu 4 --mindist 2000 --maf 0.1</code></pre></div>
+<p>Also generate a list of segments identified:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">./truffle</span> --vcf input.vcf.gz --cpu 4 --segments</code></pre></div>
+</div>
+<div id="example-data" class="section level2">
+<h2>Example data</h2>
+<p>You can download a VCF file used for the examples below from:</p>
+<p><a href="https://adimitromanolakis.github.io/truffle/fs-and-po-pairs-from-1000genomes.vcf.gz">fs-and-po-pairs-from-1000genomes.vcf.gz 4.5MB</a></p>
+<p>This dataset includes 47 selected CEU samples from 1000 genomes sequencing data, including some parent-offpring and full-sibling pairs.</p>
+</div>
+<div id="other-types-of-analysis" class="section level2">
+<h2>Other types of analysis</h2>
+<p>Truffle can read most common vcf files as input to the segment detection algorithm. The file should, generally, contain all chromosomes from all individuals. Currently, there is no support for joining vcf files from different chromosomes.</p>
 <p>For most common use cases, the vcf file should contain autosomal chromosomes only.</p>
-
-<h2 id="outputalistofsegments">Output a list of segments</h2>
-
+</div>
+<div id="running-a-single-chromosome" class="section level2">
+<h2>Running a single chromosome</h2>
+<p>If you would like to perform segment identification on a single chromosome, the sensitivity should generally be adjusted, see below for options <code>--ibs1markers</code> and <code>--ibs2markers</code></p>
+</div>
+<div id="output-a-list-of-segments" class="section level2">
+<h2>Output a list of segments</h2>
 <p>To generate a list of segments in the file truffle.segments use the option <code>--segments</code>:</p>
-
-<pre><code class="sh language-sh">./truffle --vcf input.vcf.gz --cpu 4 ---segments
-</code></pre>
-
-<h2 id="segmentdetectionsensitivity">Segment detection sensitivity</h2>
-
-<p>Truffle has some build-in measures to adjust the sensitivity of the segments detection.</p>
-
-<p>The default sensitivity threshold should produce reasonable but maybe not optimal, results for whole-genome autosomal marker panels. In many cases you might need to adjust it, for example when:</p>
-
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">./truffle</span> --vcf input.vcf.gz --cpu 4 ---segments</code></pre></div>
+</div>
+</div>
+<div id="output-files-description" class="section level1">
+<h1>Output files description</h1>
+<div id="truffle.ibd" class="section level2">
+<h2>truffle.ibd</h2>
+<p>An example output file is as follows:</p>
+<div class="sourceCode" style='min-width:1100px;'><pre class="sourceCode sh"><code class="sourceCode bash">           <span class="ex">ID1</span>                ID2    NMARK  NCOMMON         IBD0        IBD1_MAX IBD1_NSEGS      IBD1        IBD2_MAX IBD2_NSEGS      IBD2    
+    <span class="ex">P7_HG02657</span>         P5_HG02085   169413        0     1.000000             430          0  0.000000              38          0  0.000000    
+    <span class="ex">P7_HG02658</span>         P1_HG00269   169413        0     1.000000             456          0  0.000000              40          0  0.000000    
+    <span class="ex">P7_HG02658</span>         P6_HG02429   169413        0     1.000000             225          0  0.000000              29          0  0.000000    
+    <span class="ex">P8_HG03343</span>         P1_HG00269   169413        0     1.000000             233          0  0.000000              28          0  0.000000    
+    <span class="ex">P8_HG03343</span>         P6_HG02429   169413        0     1.000000             464          0  0.000000              39          0  0.000000    
+   <span class="ex">P10_HG03754</span>        P10_HG03750   169413        0     0.001765           13475         23  0.987498             270         18  0.010737    
+   <span class="ex">P14_NA19334</span>        P14_NA19331   169413        0     0.263604            9753         47  0.498734            1102        115  0.237662    </code></pre></div>
+<p>The output file columns are:</p>
 <ul>
-<li>running exome sequencing data</li>
-
-<li>analyzing data from mixed ethnicities</li>
-
-<li>analyzing single chromosomes</li>
+<li><p>ID1,ID2 : ID’s of pair.</p></li>
+<li><p>NMARK : number of markers that were used.</p></li>
+<li><p>NCOMMON : not used.</p></li>
+<li><p>IBD0,IBD1,IBD2 : The computed proportion of genome that is IBD0,1 or 2.</p></li>
+<li>IBD1_MAX : The maximum length of segment found to be IBD1 or 2.</li>
+<li><p>IBD2_MAX : The maximum length of segment found to be IBD2.</p></li>
+<li><p>IBD1_NSEGS : Number of segments that are identified as IBD1 or 2.</p></li>
+<li><p>IBD2_NSEGS : Number of segments that are identified as 2.</p></li>
 </ul>
-
+<p>In the above output file we find that the 5 first pairs are unrelated (IBD1,2 &lt; 0.001).</p>
+<p>The pair P10_HG03754 P10_HG03750 is identified as a parent offspring pair (IBD1 &gt; 0.95).</p>
+<p>The last pair is definetely a full-sibling, having IBD1 &gt; 0.4, IBD2 &gt; 0.15.</p>
+</div>
+<div id="truffle.segments" class="section level2">
+<h2>truffle.segments</h2>
+<div class="sourceCode" style='min-width:1100px;' ><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">TYPE</span>              ID1             ID2  CHROM  VARSTART   VAREND              POS Mbp      LENGTH Mbp    NMARKERS     
+<span class="ex">IBD1</span>       P0_HG00120      P0_HG00116      6     59059    59814           0.2765 Mbp      7.4560 Mbp         756
+<span class="ex">IBD2</span>       P0_HG00120      P0_HG00116      6     64814    64872         104.6593 Mbp      1.3802 Mbp          59
+<span class="ex">IBD2</span>       P0_HG00120      P0_HG00116      6     65197    65264         110.7780 Mbp      1.7072 Mbp          68
+<span class="ex">IBD1</span>       P0_HG00120      P0_HG00116      6     62715    65328          52.5659 Mbp     61.1437 Mbp        2614
+<span class="ex">IBD2</span>       P0_HG00120      P0_HG00116      6     66651    66706         139.8456 Mbp      1.8712 Mbp          56
+<span class="ex">IBD1</span>       P0_HG00120      P0_HG00116      6     66064    66818         130.3246 Mbp     13.5776 Mbp         755
+</code></pre></div>
+<p>The output file columns are:</p>
+<ul>
+<li><p>ID1,ID2 : ID’s of pair.</p></li>
+<li><p>TYPE : whether the segment was IBD1 or 2.</p></li>
+<li><p>CHROM : chromosome name.</p></li>
+<li><p>VARSTART : the index of marker on the start of the segment. This corresponds to the n’th marker in the VCF file (if filtering is applied this might not be the same as the n’th marker in the original vcf file</p></li>
+<li><p>VAREND : the index of marker at the end of the segment.</p></li>
+<li><p>POS : Position of the start of the segment in MBpairs.</p></li>
+<li><p>LENGTH : Length of the segment in MBp.</p></li>
+<li><p>NMARKERS : The length of the segment in number of markers.</p></li>
+</ul>
+</div>
+</div>
+<div id="notes-for-using-truffle" class="section level1">
+<h1>Notes for using truffle</h1>
+<div id="segment-detection-sensitivity" class="section level2">
+<h2>Segment detection sensitivity</h2>
+<p>Truffle has some build-in measures to adjust the sensitivity of the segments detection.</p>
+<p>The default sensitivity threshold should produce reasonable but maybe not optimal, results for whole-genome autosomal marker panels. In many cases you might need to adjust it, for example when:</p>
+<ul>
+<li>running exome sequencing data,</li>
+<li>analyzing studies with mixed ethnicity individuals,</li>
+<li>analyzing single chromosomes.</li>
+</ul>
 <p>In most cases, you get more than expected relatedness and you might want to consider adjusting the parameter L to 1.5-3. For example:</p>
-
-<pre><code class="sh language-sh">./truffle --vcf input.vcf.gz --L 2
-</code></pre>
-
-<h3 id="optionalldpruningandfilteringstepsforgenotypingarraydata">OPTIONAL: LD-pruning and filtering steps for genotyping array data</h3>
-
-<p>The following commands show a suggested pipeline for performing LD-pruning of variants and minor allele frequency pruning before analysis:</p>
-
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">./truffle</span> --vcf input.vcf.gz --L 2</code></pre></div>
+<p>For more precise minimum segment size control, you can specify exactly the minimum number of markers that a segment must have before it is considered for reporting in the output.</p>
+<p>There are two parameters to control the minimum lengths for IBS1 and ISB2 segments: –ibs1markers n1 and –ibs2markers n2. For example</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ex">./truffle</span> --vcf input.vcf.gz --ibs1markers 4000 --ibs2markers 500</code></pre></div>
+<div id="optional-ld-pruning-and-filtering-steps-for-genotyping-array-data" class="section level3">
+<h3>OPTIONAL: LD-pruning and filtering steps for genotyping array data</h3>
+<p>The following commands show a suggested pipeline for performing LD-pruning of variants and minor allele frequency pruning before running truffle:</p>
 <pre><code>plink --bfile input --maf 0.05 --mind 0.2 --make-bed --out /tmp/t
 plink --bfile /tmp/t --maf 0.05 --geno 0.05 --make-bed --out /tmp/t
 
@@ -134,125 +212,65 @@ plink --bfile /tmp/t --indep-pairwise 2000 100 0.5 --out /tmp/t
 cat /tmp/t.bim|awk '$1&lt;=22' &gt;/tmp/autosom.txt
 plink --bfile /tmp/t --extract /tmp/t.prune.in --make-bed --out /tmp/t2
 
-plink --bfile /tmp/t2 --extract /tmp/autosom.txt --recode-vcf --out /tmp/filtered
-</code></pre>
-
-<h2 id="commonlyusedcommandlineoptions">Commonly used command line options</h2>
-
-<h3 id="inputoutputcontrol">Input/Output control</h3>
-
-<pre><code>--vcf `vcffile
-</code></pre>
-
-<p>Reads the input <code>vcffile</code> for processing.</p>
-
-<pre><code>--segments
-</code></pre>
-
-<p>Output a list of identified segments in the file truffle.segments</p>
-
-<pre><code>--out X
-</code></pre>
-
-<p>Change the name of the output files. The results will be stored in the files X.ibd and X.segments</p>
-
-<h3 id="cpuusagecontrol">CPU usage control</h3>
-
+plink --bfile /tmp/t2 --extract /tmp/autosom.txt --recode-vcf --out /tmp/filtered</code></pre>
+</div>
+</div>
+</div>
+<div id="commonly-used-command-line-options" class="section level1">
+<h1>Commonly used command line options</h1>
+<div id="inputoutput-control" class="section level3">
+<h3>Input/Output control</h3>
 <ul>
-<li><code>--cpu N</code></li>
+<li><p><code>--vcf vcffile</code> <br> Reads the input <code>vcffile</code> for processing.</p></li>
+<li><p><code>--segments</code> <br> Output a list of identified segments in the file truffle.segments</p></li>
+<li><p><code>--out X</code> <br> Change the name of the output files. The results will be stored in the files X.ibd and X.segments</p></li>
 </ul>
-
-<p>Use N cpus when running truffle.</p>
-
-<h3 id="segmentlengththreshold">Segment length threshold</h3>
-
+</div>
+<div id="cpu-usage-control" class="section level3">
+<h3>CPU usage control</h3>
 <ul>
-<li><code>--L X</code></li>
+<li><code>--cpu N</code> <br> Use N cpus when running truffle.</li>
 </ul>
-
-<p>Adjust the sensitivity threshold for detecting segments to X. </p>
-
-<h3 id="variantfiltering">Variant filtering</h3>
-
+</div>
+<div id="segment-length-threshold" class="section level3">
+<h3>Segment length threshold</h3>
 <ul>
-<li><code>--maf *X*</code></li>
+<li><p><code>--L X</code> <br> Adjust the sensitivity threshold for detecting segments to X. Increasing L causes only larger segments to be reported.<br> Default: 1. For more specific marker length detection adjustments:</p></li>
+<li><p><code>--ibs1markers n</code> <br> Set the minimum segment length to report to n consecutive markers, for IBS1 segments.</p></li>
+<li><p><code>--ibs2markers n</code> <br> Set the minimum segment length to n consecutive markers, for IBS2 segments. This is generally 2-3 time smaller than the value of ibs1markers.</p></li>
 </ul>
-
-<p>Remove variants that have a minor allele frequency less than X. For example:
-<code>--maf 0.05</code></p>
-
+</div>
+<div id="variant-filtering" class="section level3">
+<h3>Variant filtering</h3>
 <ul>
-<li><code>--missing X</code></li>
+<li><p><code>--maf *X*</code> <br> Remove variants that have a minor allele frequency less than X. For example: <code>--maf 0.05</code></p></li>
+<li><p><code>--missing X</code> <br> Excludes variants with missing rate more than X. For example <code>--missing 0.02</code></p></li>
+<li><p><code>--mindist X</code> <br>Removes variants that are less than X base-pairs apart.For example <code>--mindist 2000</code></p></li>
 </ul>
-
-<p>Excludes variants with missing rate more than X. For example <code>--missing 0.02</code></p>
-
+</div>
+<div id="other-options" class="section level3">
+<h3>Other options</h3>
 <ul>
-<li><code>--mindist X</code></li>
+<li><code>--pair ID1 ID2</code> <br> Analyze only a single pair from the data</li>
 </ul>
+</div>
+</div>
 
-<p>Removes variants that are less than X base-pairs apart.For example <code>--mindist 2000</code></p>
 
 
-
-        
-        
-          </div>
-          <p>
-        </p>
-        
-        
-        <hr>
-        
-        
-        
-        
-        
-        
-        
-      </div>
-    </div>
-  </div>
-  <hr>
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-         
-         
-        </div>
-      </div>
-    </div>
-    
-    <div style="margin-top:500px;"></div>
-  </footer>
-  
-  
-  
-  <!-- jQuery -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <!-- Bootstrap Core JavaScript -->
-  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-  <!-- Contact Form JavaScript -->
-  <script src="js/jqBootstrapValidation.js"></script>
-  <script src="js/contact_me.js"></script>
-  <!-- Theme JavaScript -->
-  <script src="js/clean-blog.min.js"></script>
-  
-  
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="aahttps://www.googletagmanager.com/gtag/js?id=UA-7003063-8"></script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-7003063-8');
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
 </script>
 
-  
-  
 </body>
-
 </html>
+
+
+
+
