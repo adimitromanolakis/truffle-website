@@ -1,0 +1,12 @@
+
+How to update documentation:
+
+see quickstart.Rmd file on truffle code repository
+
+generally:
+1) convert Rmd to html
+2) copy the main body section to the .doc html on truffle-website
+
+
+
+
