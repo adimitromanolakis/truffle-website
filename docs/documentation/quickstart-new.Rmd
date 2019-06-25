@@ -1,13 +1,17 @@
-
 ---
-title: "TRUFFLE – v1.2"
+title: "TRUFFLE – v1.38"
 author: "Apostolos Dimitromanolakis"
-date: "`r Sys.Date()`"
+date: "27 June 2019"
 
-output: rmarkdown::html_vignette
+output: 
+ rmarkdown::html_vignette:  
+   css: 
+   - !expr system.file("rmarkdown/templates/html_vignette/resources/vignette.css", package = "rmarkdown")
+   - style.css
+
 
 vignette: >   
-  %\VignetteIndexEntry{Quickstart2}
+  %\VignetteIndexEntry{Quickstart for truffle}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 
@@ -22,9 +26,6 @@ h2 { font-size: 130%; }
 h3 { font-size: 110%; }
 h4 { font-size: 105%; font-family:Courier; white-space:pre; }
 h5 { font-size: 100%; }
-
-
-p,li { font-family: Nunito; }
 
 .main-content pre> code {  awhite-space: pre-wr
 ap; } 
@@ -58,22 +59,28 @@ across pairs of individuals.
 
 ## Important Notes for this release
 
-Truffle is currently under development. There might be serious bugs and issues that we are currently working on. 
-If you use this version of truffle, we ask you to notify us of any problems or errors encountered. If truffle works perfectly, we
-would also like your feedback.
+Truffle is currently under development and a beta version has been released. This means that while the main algorithm has been validated in numerous datasets, there might still be some loose ends.
+
+We ask you to notify us of any problems or errors encountered. If truffle works perfectly you can also send us an email with your experience.
 
 
 ## Input file requirements
 
-Truffle requires a single *whole-genome* vcf input file with genotypes for all samples. 
+For the most common use case, truffle requires a single *whole-genome* vcf input file with genotypes for every individuals. 
 
-In general any vcf file will work as long as it contains information from all the autosomal chromosomes. If you have a plink bed/bim file that you previously ld-pruned and filtered, truffle can use it as long as you convert it back to vcf using the plink command `--recode-vcf`.
+Most vcf files should be readable as input. If you have a plink bed/bim file that you previously ld-pruned and filtered, truffle can use it as long as you convert it back to vcf using the plink command `--recode-vcf`.
+
+It is also possible to run single-chromosome or single region analysis, for identifying segment locations and sizes. In such cases it might be necessary to adjust the thresholds for detecting segments.
 
 ## Number of marker requirements
 
-For this pre-release version we recommend filtering down the markers of the vcf file to 60-200k. 
+For this pre-release version we recommend filtering down the markers of the vcf file to 100-500k.
 
 If you have an unfiltered vcf file with < 10 million markers, truffle has embedded functionality for filtering the vcf file before analysis.
+
+## Default filtering criteria
+
+By default truffle filters out markers with minor allele frequency < 5% or missing data > 5%. If you would like to include all markers in analysis you can use the option `--nofiltering`.
 
 ## Quickstart
 
@@ -118,7 +125,8 @@ For most common use cases, the vcf file should contain autosomal chromosomes onl
 
 ## Running a single chromosome
 
-If you would like to perform segment identification on a single chromosome, the sensitivity must bu adjusted by the corresponding length of the chromosome divided by the total genome length. As a starting point we recommend a setting of `--L 10`.
+If you would like to perform segment identification on a single chromosome, the sensitivity should generally be adjusted, see below for options `--ibs1markers` and `--ibs2markers`
+
 
 ## Output a list of segments
 
@@ -233,6 +241,15 @@ In most cases, you get more than expected relatedness and you might want to cons
 ./truffle --vcf input.vcf.gz --L 2
 ```
 
+For more precise minimum segment size control, you can specify exactly the minimum number of markers that a segment must have before it is considered for reporting in the output.
+
+There are two parameters to control the minimum lengths for IBS1 and ISB2 segments: --ibs1markers n1 and --ibs2markers n2. For example
+
+
+```sh
+./truffle --vcf input.vcf.gz --ibs1markers 4000 --ibs2markers 500
+```
+
 
 
 ### OPTIONAL: LD-pruning and filtering steps for genotyping array data
@@ -260,70 +277,43 @@ plink --bfile /tmp/t2 --extract /tmp/autosom.txt --recode-vcf --out /tmp/filtere
 ### Input/Output control
 
 
-```
---vcf `vcffile
-```
+* `--vcf vcffile` <br> Reads the input `vcffile` for processing.
 
-Reads the input `vcffile` for processing.
+* `--segments` <br>  Output a list of identified segments in the file truffle.segments
 
-```
---segments
-```
-Output a list of identified segments in the file truffle.segments
-
-```
---out X
-```
-
-Change the name of the output files. The results will be stored in the files X.ibd and X.segments
+* `--out X ` <br>  Change the name of the output files. The results will be stored in the files X.ibd and X.segments
 
 ### CPU usage control
 
 
-* `--cpu N `
-
-Use N cpus when running truffle.
+* `--cpu N ` <br> Use N cpus when running truffle.
 
 
 ### Segment length threshold
 
-* `--L X`
-
-Adjust the sensitivity threshold for detecting segments to X. Default: 1. Recommended : 0.5-2 for whole genome scans. 5-22 for single chromosome scans.
-
+* `--L X` <br>  Adjust the sensitivity threshold for detecting segments to X. Increasing L causes only larger segments to be reported.<br> Default: 1. 
 For more specific marker length detection adjustments:
 
 
-* `--ibs1markers n`
+* `--ibs1markers n` <br>  Set the minimum segment length to report to n consecutive markers, for IBS1 segments.
 
-Set the minimum segment length to report to n consecutive markers, for IBS1 segments.
-
-* `--ibs2markers n`
-
-Set the minimum segment length to n consecutive markers, for IBS2 segments. This is generally 2-3 time smaller that ibs1markers.
+* `--ibs2markers n` <br>  Set the minimum segment length to n consecutive markers, for IBS2 segments. This is generally 2-3 time smaller than the value of ibs1markers.
 
 
 
 ### Variant filtering
 
-* `--maf *X* `
+* `--maf *X* ` <br>  Remove variants that have a minor allele frequency less than X. For example: `--maf 0.05`
 
-Remove variants that have a minor allele frequency less than X. For example:
-`--maf 0.05`
+* `--missing X ` <br>  Excludes variants with missing rate more than X. For example `--missing 0.02`
 
-* `--missing X `
-
-Excludes variants with missing rate more than X. For example `--missing 0.02`
-
-* `--mindist X`
-
-Removes variants that are less than X base-pairs apart.For example `--mindist 2000`
+* `--mindist X` <br>Removes variants that are less than X base-pairs apart.For example `--mindist 2000`
 
 
 ### Other options
 
-* `--pair ID1 ID2`
-* `--thin x`
+* `--pair ID1 ID2` <br>  Analyze only a single pair from the data
+
 
 
 
